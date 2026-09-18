@@ -21,16 +21,25 @@ import time
 from openai import OpenAI
 
 # ============ 配置 ============
-MODEL = "deepseek-chat"
+# 模型名必须用官方当前定价表上的名字。
+# 旧的 `deepseek-chat` 已于 2026-07-24 停止服务（见官方更新日志），
+# 继续使用会得到未定义行为：无法确定实际由哪个模型应答、按什么价计费。
+MODEL = "deepseek-flash"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CASES_PATH = os.path.join(BASE_DIR, "cases.json")
 RESULTS_PATH = os.path.join(BASE_DIR, "results.json")
 
-# 单价（元 / 百万 token），默认留空。
-# 需要成本维度时，从官方定价页取真实值填入，并在提交信息里注明取值日期。
-# 留空时 estimate_cost() 返回 None，汇总里显示"未填单价"——不猜、不编。
-PRICE_INPUT_PER_M = None
-PRICE_OUTPUT_PER_M = None
+# 单价（元 / 百万 token）
+# 来源：https://api-docs.deepseek.com/zh-cn/quick_start/pricing/
+# 取值日期：2026-09-18。deepseek-flash 采用高峰/空闲两档计价，
+# 高峰时段为北京时间周一至周五 9:00-12:00、14:00-18:00，其余为空闲（半价）。
+# 这里填高峰价，属于"取上限"的保守估算，不会低估成本。
+# 若在空闲时段跑测，把下面两个值都减半即可。
+PRICE_INPUT_PER_M = 2.0    # 高峰：百万 tokens 输入（缓存未命中）
+PRICE_OUTPUT_PER_M = 8.0   # 高峰：百万 tokens 输出
+# 注：命中缓存的输入另有一档价（高峰 0.04 元）。实测本测试集的
+# prompt_cache_hit_tokens 恒为 0（11 条 prompt 各不相同、无重复前缀），
+# 故不单独建模该档；若后续加入重复调用的题集需要补充。
 
 API_KEY = os.environ.get("DEEPSEEK_API_KEY")
 
@@ -58,9 +67,12 @@ def get_client():
 def ask_model(prompt, model_name=MODEL):
     """向模型发一道题。
 
-    返回 (回答文本, 输入token, 输出token, 延迟秒, 错误信息)。
+    返回 (回答文本, 输入token, 输出token, 延迟秒, 错误信息, 缓存命中token)。
     错误信息非空表示本次请求失败，调用方需要单独处理，
     因为请求失败属于评测基础设施故障，不应计入模型能力。
+
+    为什么要单独记录缓存命中量：官方对"输入缓存命中"和"输入缓存未命中"
+    采用两档单价，合并成一个 prompt_tokens 会算不准成本。
     """
     start = time.time()
     try:
@@ -72,17 +84,27 @@ def ask_model(prompt, model_name=MODEL):
         latency = time.time() - start
         text = resp.choices[0].message.content
         usage = resp.usage
-        return text, usage.prompt_tokens, usage.completion_tokens, latency, None
+        cache_hit = getattr(usage, "prompt_cache_hit_tokens", 0) or 0
+        return (text, usage.prompt_tokens, usage.completion_tokens,
+                latency, None, cache_hit)
     except Exception as e:
-        return "", 0, 0, time.time() - start, str(e)
+        return "", 0, 0, time.time() - start, str(e), 0
 
 
-def estimate_cost(in_tokens, out_tokens):
-    """按官方单价估算成本（元）。单价未填时返回 None，不做任何假设。"""
+def estimate_cost(in_tokens, out_tokens, cache_hit_tokens=0):
+    """按官方单价估算成本（元）。
+
+    仅当单价未填时返回 None，不做任何假设。
+    in_tokens 是官方口径的 prompt_tokens（含缓存命中部分），
+    因此计费时要把命中部分按 0.02 折算（占高峰输入价的 2%）。
+    """
     if PRICE_INPUT_PER_M is None or PRICE_OUTPUT_PER_M is None:
         return None
-    return (in_tokens / 1_000_000 * PRICE_INPUT_PER_M
-            + out_tokens / 1_000_000 * PRICE_OUTPUT_PER_M)
+    miss = max(in_tokens - cache_hit_tokens, 0)
+    cost_in = miss / 1_000_000 * PRICE_INPUT_PER_M
+    cost_in += cache_hit_tokens / 1_000_000 * (PRICE_INPUT_PER_M * 0.02)
+    cost_out = out_tokens / 1_000_000 * PRICE_OUTPUT_PER_M
+    return cost_in + cost_out
 
 
 # ============ 评分器 ============
@@ -260,7 +282,7 @@ def run(limit=None):
     results = []
     for c in cases:
         print(f"\n[{c['id']}/{len(cases)}] ({c['type']}) {c['prompt'][:40]}...")
-        text, tin, tout, lat, err = ask_model(c["prompt"])
+        text, tin, tout, lat, err, cache_hit = ask_model(c["prompt"])
         if err:
             print(f"  请求失败: {err}")
             results.append({**c, "answer": None, "error": err, "correct": False})
@@ -275,7 +297,7 @@ def run(limit=None):
         if c.get("known_issue"):
             reason = c["known_issue"]
 
-        cost = estimate_cost(tin, tout)
+        cost = estimate_cost(tin, tout, cache_hit)
 
         print(f"  回答: {text!r}")
         print(f"  判分: {'✅' if correct else '❌'}  原因: {reason}")
@@ -286,7 +308,7 @@ def run(limit=None):
             "id": c["id"], "type": c["type"], "prompt": c["prompt"],
             "answer": text, "correct": correct, "reason": reason,
             "latency": round(lat, 3), "tokens_in": tin, "tokens_out": tout,
-            "cost": cost,
+            "cache_hit_tokens": cache_hit, "cost": cost,
         })
 
     # ---- 总体 ----
@@ -294,6 +316,18 @@ def run(limit=None):
     print(f"模型: {MODEL}   题目数: {len(results)}")
     ok = sum(1 for r in results if r.get("correct"))
     print(f"准确率: {ok}/{len(results)} = {ok / len(results) * 100:.1f}%")
+
+    # ---- 成本 ----
+    # 成本只有在单价已填时才有意义；未填就明确显示"未填单价"，不猜。
+    costs = [r["cost"] for r in results if r.get("cost") is not None]
+    if costs:
+        total_cost = sum(costs)
+        print(f"总成本: {total_cost:.6f} 元   "
+              f"平均每题: {total_cost / len(costs):.6f} 元")
+        print(f"（按 {PRICE_INPUT_PER_M} 元/百万输入 + "
+              f"{PRICE_OUTPUT_PER_M} 元/百万输出 的高峰价估算）")
+    else:
+        print("成本: 未填单价")
 
     # ---- 分类统计 ----
     # 总分会把不同能力维度混在一起：一个模型总分 70%，可能是样样 70%，

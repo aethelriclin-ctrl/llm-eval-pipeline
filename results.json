@@ -3,13 +3,14 @@
     "id": 1,
     "type": "算术推理",
     "prompt": "一个班有 37 名学生，其中 18 名女生。老师要把全班平均分成若干组，每组人数相同且不超过 6 人，最多能分成几组？只输出数字。",
-    "answer": "6",
-    "correct": false,
+    "answer": "37",
+    "correct": true,
     "reason": "题目歧义",
-    "latency": 1.255,
-    "tokens_in": 47,
-    "tokens_out": 1,
-    "cost": null
+    "latency": 4.022,
+    "tokens_in": 73,
+    "tokens_out": 537,
+    "cache_hit_tokens": 0,
+    "cost": 0.004442000000000001
   },
   {
     "id": 2,
@@ -18,10 +19,11 @@
     "answer": "跌",
     "correct": true,
     "reason": "判对",
-    "latency": 0.398,
-    "tokens_in": 38,
-    "tokens_out": 1,
-    "cost": null
+    "latency": 0.699,
+    "tokens_in": 64,
+    "tokens_out": 64,
+    "cache_hit_tokens": 0,
+    "cost": 0.0006399999999999999
   },
   {
     "id": 3,
@@ -30,10 +32,11 @@
     "answer": "def add(a, b):\n    return a + b",
     "correct": true,
     "reason": "判对",
-    "latency": 0.699,
-    "tokens_in": 36,
-    "tokens_out": 11,
-    "cost": null
+    "latency": 0.808,
+    "tokens_in": 62,
+    "tokens_out": 93,
+    "cache_hit_tokens": 0,
+    "cost": 0.000868
   },
   {
     "id": 4,
@@ -42,58 +45,63 @@
     "answer": "def is_even(n):\n    return n % 2 == 0",
     "correct": true,
     "reason": "判对",
-    "latency": 0.419,
-    "tokens_in": 29,
-    "tokens_out": 15,
-    "cost": null
+    "latency": 0.945,
+    "tokens_in": 55,
+    "tokens_out": 76,
+    "cache_hit_tokens": 0,
+    "cost": 0.000718
   },
   {
     "id": 5,
     "type": "事实问答",
     "prompt": "Python 里 list 和 tuple 最主要的一个区别是什么？用一句话回答。",
-    "answer": "list 是可变的（可以增删改元素），tuple 是不可变的。",
+    "answer": "list 可变（可增删改），tuple 不可变。",
     "correct": true,
     "reason": "判对",
-    "latency": 0.624,
-    "tokens_in": 21,
-    "tokens_out": 16,
-    "cost": null
+    "latency": 0.974,
+    "tokens_in": 47,
+    "tokens_out": 84,
+    "cache_hit_tokens": 0,
+    "cost": 0.000766
   },
   {
     "id": 6,
     "type": "事实问答",
     "prompt": "HTTP 状态码 404 和 500 分别代表什么？各用四个字以内回答。",
-    "answer": "404：资源未找到\n500：服务器错误",
+    "answer": "404：未找到  \n500：内部错误",
     "correct": true,
     "reason": "判对",
-    "latency": 0.673,
-    "tokens_in": 26,
-    "tokens_out": 10,
-    "cost": null
+    "latency": 1.725,
+    "tokens_in": 52,
+    "tokens_out": 276,
+    "cache_hit_tokens": 0,
+    "cost": 0.002312
   },
   {
     "id": 7,
     "type": "格式约束",
-    "prompt": "只输出一个 JSON，不要任何解释、不要 markdown 代码块。格式：{\"name\": \"鲸鱼娘\", \"age\": 1}。请照抄这个 JSON。",
-    "answer": "{\"name\": \"鲸鱼娘\", \"age\": 1}",
+    "prompt": "只输出一个 JSON，不要任何解释、不要 markdown 代码块。格式：{\"model\": \"deepseek-flash\", \"temperature\": 0}。请照抄这个 JSON。",
+    "answer": "{\"model\": \"deepseek-flash\", \"temperature\": 0}",
     "correct": true,
     "reason": "判对",
-    "latency": 0.308,
-    "tokens_in": 43,
-    "tokens_out": 14,
-    "cost": null
+    "latency": 0.991,
+    "tokens_in": 70,
+    "tokens_out": 97,
+    "cache_hit_tokens": 0,
+    "cost": 0.0009159999999999999
   },
   {
     "id": 8,
     "type": "格式约束",
     "prompt": "用恰好 3 个字回答：中国的首都是哪里？只输出这 3 个字，不要标点。",
-    "answer": "北京",
+    "answer": "北京市",
     "correct": true,
     "reason": "题目歧义",
-    "latency": 0.617,
-    "tokens_in": 29,
-    "tokens_out": 1,
-    "cost": null
+    "latency": 1.349,
+    "tokens_in": 55,
+    "tokens_out": 101,
+    "cache_hit_tokens": 0,
+    "cost": 0.000918
   },
   {
     "id": 9,
@@ -102,10 +110,11 @@
     "answer": "3,12,45",
     "correct": true,
     "reason": "判对",
-    "latency": 0.539,
-    "tokens_in": 45,
-    "tokens_out": 5,
-    "cost": null
+    "latency": 0.648,
+    "tokens_in": 71,
+    "tokens_out": 83,
+    "cache_hit_tokens": 0,
+    "cost": 0.000806
   },
   {
     "id": 10,
@@ -114,21 +123,23 @@
     "answer": "四",
     "correct": true,
     "reason": "判对",
-    "latency": 0.604,
-    "tokens_in": 21,
-    "tokens_out": 1,
-    "cost": null
+    "latency": 1.228,
+    "tokens_in": 47,
+    "tokens_out": 91,
+    "cache_hit_tokens": 0,
+    "cost": 0.000822
   },
   {
     "id": 11,
     "type": "算术推理",
     "prompt": "某工厂原计划 16 天生产 1280 件产品。实际生产中，由于效率提升，每天比原计划多生产 25%。实际需要多少天完成？只输出数字。不足一天按一天算.",
-    "answer": "10",
-    "correct": false,
-    "reason": "能力不足",
-    "latency": 0.509,
-    "tokens_in": 52,
-    "tokens_out": 1,
-    "cost": null
+    "answer": "13",
+    "correct": true,
+    "reason": "判对",
+    "latency": 1.071,
+    "tokens_in": 78,
+    "tokens_out": 120,
+    "cache_hit_tokens": 0,
+    "cost": 0.001116
   }
 ]
