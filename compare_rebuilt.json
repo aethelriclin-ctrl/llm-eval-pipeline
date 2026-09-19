@@ -1,0 +1,261 @@
+{
+  "note": "由 rebuild_compare.py 从 results_*.json 重建",
+  "groups": {
+    "base": {
+      "deepseek-flash": {
+        "source": "results_deepseek-flash.json",
+        "n": 11,
+        "ok": 11,
+        "accuracy": 1.0,
+        "total_cost": 0.01002,
+        "avg_cost": 0.0009109090909090908,
+        "avg_latency": 1.0100909090909092,
+        "max_latency": 1.277,
+        "per_item": {
+          "1": {
+            "type": "算术推理",
+            "correct": true,
+            "cost": 0.00157,
+            "latency": 1.277
+          },
+          "2": {
+            "type": "算术推理",
+            "correct": true,
+            "cost": 0.000544,
+            "latency": 0.993
+          },
+          "3": {
+            "type": "代码生成",
+            "correct": true,
+            "cost": 0.00082,
+            "latency": 1.031
+          },
+          "4": {
+            "type": "代码生成",
+            "correct": true,
+            "cost": 0.000982,
+            "latency": 0.914
+          },
+          "5": {
+            "type": "事实问答",
+            "correct": true,
+            "cost": 0.000806,
+            "latency": 0.848
+          },
+          "6": {
+            "type": "事实问答",
+            "correct": true,
+            "cost": 0.001016,
+            "latency": 1.13
+          },
+          "7": {
+            "type": "格式约束",
+            "correct": true,
+            "cost": 0.000988,
+            "latency": 1.059
+          },
+          "8": {
+            "type": "格式约束",
+            "correct": true,
+            "cost": 0.000726,
+            "latency": 0.845
+          },
+          "9": {
+            "type": "格式约束",
+            "correct": true,
+            "cost": 0.001038,
+            "latency": 0.903
+          },
+          "10": {
+            "type": "格式约束",
+            "correct": true,
+            "cost": 0.000622,
+            "latency": 0.937
+          },
+          "11": {
+            "type": "算术推理",
+            "correct": true,
+            "cost": 0.000908,
+            "latency": 1.174
+          }
+        }
+      },
+      "deepseek-v4-pro": {
+        "source": "results_deepseek-v4-pro.json",
+        "n": 11,
+        "ok": 11,
+        "accuracy": 1.0,
+        "total_cost": 0.127377,
+        "avg_cost": 0.011579727272727271,
+        "avg_latency": 2.343272727272727,
+        "max_latency": 16.781,
+        "per_item": {
+          "1": {
+            "type": "算术推理",
+            "correct": true,
+            "cost": 0.095481,
+            "latency": 16.781
+          },
+          "2": {
+            "type": "算术推理",
+            "correct": true,
+            "cost": 0.002007,
+            "latency": 0.792
+          },
+          "3": {
+            "type": "代码生成",
+            "correct": true,
+            "cost": 0.002826,
+            "latency": 0.675
+          },
+          "4": {
+            "type": "代码生成",
+            "correct": true,
+            "cost": 0.002817,
+            "latency": 0.784
+          },
+          "5": {
+            "type": "事实问答",
+            "correct": true,
+            "cost": 0.002286,
+            "latency": 0.692
+          },
+          "6": {
+            "type": "事实问答",
+            "correct": true,
+            "cost": 0.008702999999999999,
+            "latency": 1.631
+          },
+          "7": {
+            "type": "格式约束",
+            "correct": true,
+            "cost": 0.002763,
+            "latency": 0.829
+          },
+          "8": {
+            "type": "格式约束",
+            "correct": true,
+            "cost": 0.002412,
+            "latency": 0.71
+          },
+          "9": {
+            "type": "格式约束",
+            "correct": true,
+            "cost": 0.002907,
+            "latency": 1.084
+          },
+          "10": {
+            "type": "格式约束",
+            "correct": true,
+            "cost": 0.002286,
+            "latency": 0.653
+          },
+          "11": {
+            "type": "算术推理",
+            "correct": true,
+            "cost": 0.002889,
+            "latency": 1.145
+          }
+        }
+      }
+    },
+    "cases_hard": {
+      "deepseek-flash": {
+        "source": "results_deepseek-flash_cases_hard.json",
+        "n": 6,
+        "ok": 6,
+        "accuracy": 1.0,
+        "total_cost": 0.024368,
+        "avg_cost": 0.0040613333333333335,
+        "avg_latency": 2.4716666666666667,
+        "max_latency": 9.978,
+        "per_item": {
+          "H1": {
+            "type": "多步数值推理",
+            "correct": true,
+            "cost": 0.0005059999999999999,
+            "latency": 0.883
+          },
+          "H2": {
+            "type": "边界条件推理",
+            "correct": true,
+            "cost": 0.019282,
+            "latency": 9.978
+          },
+          "H3": {
+            "type": "信息不足识别",
+            "correct": true,
+            "cost": 0.00065,
+            "latency": 0.622
+          },
+          "H4": {
+            "type": "多约束指令遵循",
+            "correct": true,
+            "cost": 0.002032,
+            "latency": 1.293
+          },
+          "H5": {
+            "type": "逻辑量词陷阱",
+            "correct": true,
+            "cost": 0.00067,
+            "latency": 1.201
+          },
+          "H6": {
+            "type": "逻辑量词陷阱",
+            "correct": true,
+            "cost": 0.001228,
+            "latency": 0.853
+          }
+        }
+      },
+      "deepseek-v4-pro": {
+        "source": "results_deepseek-v4-pro_cases_hard.json",
+        "n": 6,
+        "ok": 6,
+        "accuracy": 1.0,
+        "total_cost": 0.045045,
+        "avg_cost": 0.0075075,
+        "avg_latency": 1.5156666666666667,
+        "max_latency": 4.447,
+        "per_item": {
+          "H1": {
+            "type": "多步数值推理",
+            "correct": true,
+            "cost": 0.001962,
+            "latency": 0.89
+          },
+          "H2": {
+            "type": "边界条件推理",
+            "correct": true,
+            "cost": 0.029421,
+            "latency": 4.447
+          },
+          "H3": {
+            "type": "信息不足识别",
+            "correct": true,
+            "cost": 0.002862,
+            "latency": 0.87
+          },
+          "H4": {
+            "type": "多约束指令遵循",
+            "correct": true,
+            "cost": 0.004617,
+            "latency": 1.166
+          },
+          "H5": {
+            "type": "逻辑量词陷阱",
+            "correct": true,
+            "cost": 0.0023490000000000004,
+            "latency": 0.745
+          },
+          "H6": {
+            "type": "逻辑量词陷阱",
+            "correct": true,
+            "cost": 0.003834,
+            "latency": 0.976
+          }
+        }
+      }
+    }
+  }
+}

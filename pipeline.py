@@ -7,8 +7,11 @@ r"""
            setx DEEPSEEK_API_KEY "你的key"        # 永久生效，需重开窗口
     2) 运行：
            cd <项目目录>
-           python pipeline.py            # 跑全部题目
+           python pipeline.py            # 跑全部题目（默认 deepseek-flash）
            python pipeline.py --limit 5  # 只跑前 5 题（调试用）
+           python pipeline.py --model deepseek-v4-pro   # 切换被测模型
+
+结果按模型分文件保存：results_<模型名>.json —— 多模型对照时不会互相覆盖。
 
 设计要点见 README.md。
 """
@@ -31,14 +34,19 @@ RESULTS_PATH = os.path.join(BASE_DIR, "results.json")
 
 # 单价（元 / 百万 token）
 # 来源：https://api-docs.deepseek.com/zh-cn/quick_start/pricing/
-# 取值日期：2026-09-18。deepseek-flash 采用高峰/空闲两档计价，
+# 取值日期：2026-09-18。采用高峰/空闲两档计价，
 # 高峰时段为北京时间周一至周五 9:00-12:00、14:00-18:00，其余为空闲（半价）。
 # 这里填高峰价，属于"取上限"的保守估算，不会低估成本。
-# 若在空闲时段跑测，把下面两个值都减半即可。
-PRICE_INPUT_PER_M = 2.0    # 高峰：百万 tokens 输入（缓存未命中）
-PRICE_OUTPUT_PER_M = 8.0   # 高峰：百万 tokens 输出
-# 注：命中缓存的输入另有一档价（高峰 0.04 元）。实测本测试集的
-# prompt_cache_hit_tokens 恒为 0（11 条 prompt 各不相同、无重复前缀），
+# 若在空闲时段跑测，把值减半即可。
+#
+# 按模型分开存：v4-pro 比 flash 贵 4.5 倍，用 flash 的价算 pro 的成本会严重低估。
+PRICES = {
+    "deepseek-flash":  (2.0, 8.0),     # 高峰：百万输入 / 百万输出
+    "deepseek-v4-pro": (9.0, 27.0),    # 高峰价，为 flash 的 4.5 倍
+}
+PRICE_INPUT_PER_M, PRICE_OUTPUT_PER_M = PRICES[MODEL]
+# 注：命中缓存的输入另有一档价（flash 高峰 0.04 元）。实测本测试集的
+# prompt_cache_hit_tokens 恒为 0（各条 prompt 互不相同、无重复前缀），
 # 故不单独建模该档；若后续加入重复调用的题集需要补充。
 
 API_KEY = os.environ.get("DEEPSEEK_API_KEY")
@@ -273,7 +281,30 @@ GRADERS = {
 
 # ============ 主流程 ============
 
-def run(limit=None):
+def run(limit=None, model=None, cases_file=None):
+    # 允许通过 --cases 指定题库文件（例如难度分层题库 cases_hard.json）。
+    global CASES_PATH
+    if cases_file:
+        CASES_PATH = cases_file if os.path.isabs(cases_file) \
+            else os.path.join(BASE_DIR, cases_file)
+    # 结果文件名后缀：带题库名，避免不同题库的跑测互相覆盖。
+    tag = ("_" + os.path.splitext(os.path.basename(CASES_PATH))[0]) \
+        if cases_file else ""
+
+    # 允许通过 --model 切换被测模型（项目 3 的多模型对照需要）。
+    # 单价按模型取自 PRICES，不能沿用 flash 的价去算 pro 的成本。
+    global MODEL, PRICE_INPUT_PER_M, PRICE_OUTPUT_PER_M
+    if model:
+        MODEL = model
+    if MODEL not in PRICES:
+        print(f"警告：PRICES 里没有 {MODEL} 的单价，成本将无法计算。"
+              f"可选：{list(PRICES)}")
+        PRICE_INPUT_PER_M = PRICE_OUTPUT_PER_M = None
+    else:
+        PRICE_INPUT_PER_M, PRICE_OUTPUT_PER_M = PRICES[MODEL]
+    print(f"被测模型：{MODEL}　单价："
+          f"{PRICE_INPUT_PER_M} 元/百万输入 + {PRICE_OUTPUT_PER_M} 元/百万输出")
+
     with open(CASES_PATH, encoding="utf-8") as f:
         cases = json.load(f)
     if limit:
@@ -367,9 +398,11 @@ def run(limit=None):
         print(f"  → 修正后准确率: {effective_ok}/{len(results)} = "
               f"{effective_ok / len(results) * 100:.1f}%   （把评测侧问题造成的失败还回去）")
 
-    with open(RESULTS_PATH, "w", encoding="utf-8") as f:
+    # 结果按【模型 + 题库】分文件存，避免互相覆盖（多模型/多题库对照需要数据并存）。
+    out_path = os.path.join(BASE_DIR, f"results_{MODEL}{tag}.json")
+    with open(out_path, "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
-    print(f"\n原始结果已写入: {RESULTS_PATH}")
+    print(f"\n原始结果已写入: {out_path}")
 
 
 if __name__ == "__main__":
@@ -381,4 +414,10 @@ if __name__ == "__main__":
     limit = None
     if "--limit" in sys.argv:
         limit = int(sys.argv[sys.argv.index("--limit") + 1])
-    run(limit)
+    model = None
+    if "--model" in sys.argv:
+        model = sys.argv[sys.argv.index("--model") + 1]
+    cases_file = None
+    if "--cases" in sys.argv:
+        cases_file = sys.argv[sys.argv.index("--cases") + 1]
+    run(limit, model, cases_file)

@@ -1,0 +1,100 @@
+{
+  "rounds": 3,
+  "cases_file": "cases_hard.json",
+  "summaries": {
+    "deepseek-flash": {
+      "model": "deepseek-flash",
+      "rounds": 3,
+      "accuracy_mean": 1.0,
+      "accuracy_min": 1.0,
+      "accuracy_max": 1.0,
+      "accuracy_stable": true,
+      "avg_cost_mean": 0.002883111111111111,
+      "avg_cost_min": 0.0021746666666666663,
+      "avg_cost_max": 0.0040613333333333335,
+      "total_cost_sum": 0.051896,
+      "avg_latency_mean": 1.892111111111111,
+      "avg_latency_max": 2.4716666666666667,
+      "max_latency_worst": 9.978,
+      "per_item": {
+        "H1": {
+          "pass": 3,
+          "n": 3,
+          "type": "多步数值推理"
+        },
+        "H2": {
+          "pass": 3,
+          "n": 3,
+          "type": "边界条件推理"
+        },
+        "H3": {
+          "pass": 3,
+          "n": 3,
+          "type": "信息不足识别"
+        },
+        "H4": {
+          "pass": 3,
+          "n": 3,
+          "type": "多约束指令遵循"
+        },
+        "H5": {
+          "pass": 3,
+          "n": 3,
+          "type": "逻辑量词陷阱"
+        },
+        "H6": {
+          "pass": 3,
+          "n": 3,
+          "type": "逻辑量词陷阱"
+        }
+      }
+    },
+    "deepseek-v4-pro": {
+      "model": "deepseek-v4-pro",
+      "rounds": 3,
+      "accuracy_mean": 1.0,
+      "accuracy_min": 1.0,
+      "accuracy_max": 1.0,
+      "accuracy_stable": true,
+      "avg_cost_mean": 0.00945,
+      "avg_cost_min": 0.006953999999999999,
+      "avg_cost_max": 0.0138885,
+      "total_cost_sum": 0.1701,
+      "avg_latency_mean": 1.7902777777777779,
+      "avg_latency_max": 2.3158333333333334,
+      "max_latency_worst": 8.636,
+      "per_item": {
+        "H1": {
+          "pass": 3,
+          "n": 3,
+          "type": "多步数值推理"
+        },
+        "H2": {
+          "pass": 3,
+          "n": 3,
+          "type": "边界条件推理"
+        },
+        "H3": {
+          "pass": 3,
+          "n": 3,
+          "type": "信息不足识别"
+        },
+        "H4": {
+          "pass": 3,
+          "n": 3,
+          "type": "多约束指令遵循"
+        },
+        "H5": {
+          "pass": 3,
+          "n": 3,
+          "type": "逻辑量词陷阱"
+        },
+        "H6": {
+          "pass": 3,
+          "n": 3,
+          "type": "逻辑量词陷阱"
+        }
+      }
+    }
+  }
+}
