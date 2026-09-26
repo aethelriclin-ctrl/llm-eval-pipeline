@@ -2,7 +2,8 @@
 
 > 日期：2026-09-19（2026-09-26 校准口径）　|　脚本：`compare_models.py`、`rebuild_compare.py`
 > 数据：`results.json`、`compare_base_r5_20260926.json`（基础库 5 轮）、
-> `compare_results_hard.json`（难题库 3 轮）、`compare_rebuilt.json`（单次逐题明细）
+> `compare_results_hard.json`（难题库 3 轮）、`compare_rebuilt.json`（单次逐题明细）、
+> `results_deepseek-flash_cases_hard.json` / `results_deepseek-v4-pro_cases_hard.json`（难题库逐题原始结果）
 > 模型：`deepseek-flash` × `deepseek-v4-pro`　|　题库：11 题基础 + 6 题难度分层
 
 ---

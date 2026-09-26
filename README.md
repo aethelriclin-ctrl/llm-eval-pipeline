@@ -435,8 +435,13 @@ if c.get("known_issue"):
 
 单题成本波动按题库分别统计：**基础库 flash 2.64 倍 / pro 2.09 倍；难题库 flash 1.87 倍 / pro 2.00 倍**。
 **本项目保留的成本结果文件**：`results.json`（11 题单次逐条）、
-`compare_base_r5_20260926.json`（基础库 5 轮）、`compare_rebuilt.json`（两套题库单次逐题明细）、
-`compare_results_hard.json`（难题库 3 轮）。
+`compare_base_r5_20260926.json`（基础库 5 轮）、`compare_results_hard.json`（难题库 3 轮）、
+`compare_rebuilt.json`（单次逐题明细）。
+其中 `compare_rebuilt.json` 的难题库两块，原始文件是
+`results_deepseek-flash_cases_hard.json` / `results_deepseek-v4-pro_cases_hard.json`（均已入库）；
+基础库两块的原始文件**已被 2026-09-26 的重跑覆盖，仓库内不再留存**——
+该次跑测的逐题数据只保存在 `compare_rebuilt.json` 里，可直接在该文件内复核，
+所以 `rebuild_compare.py` 在全新克隆上无法重建基础库那一组。
 
 ---
 
