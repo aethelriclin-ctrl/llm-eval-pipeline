@@ -4,6 +4,7 @@
     "base": {
       "deepseek-flash": {
         "source": "results_deepseek-flash.json",
+        "source_note": "该次跑测的原始 results 文件已被 2026-09-26 的基础库 5 轮重跑覆盖；本文件是该次跑测的唯一留存，逐题数据可在此复核。",
         "n": 11,
         "ok": 11,
         "accuracy": 1.0,
@@ -82,6 +83,7 @@
       },
       "deepseek-v4-pro": {
         "source": "results_deepseek-v4-pro.json",
+        "source_note": "该次跑测的原始 results 文件已被 2026-09-26 的基础库 5 轮重跑覆盖；本文件是该次跑测的唯一留存，逐题数据可在此复核。",
         "n": 11,
         "ok": 11,
         "accuracy": 1.0,
