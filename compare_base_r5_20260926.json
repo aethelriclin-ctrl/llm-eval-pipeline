@@ -1,0 +1,150 @@
+{
+  "rounds": 5,
+  "cases_file": null,
+  "summaries": {
+    "deepseek-flash": {
+      "model": "deepseek-flash",
+      "rounds": 5,
+      "accuracy_mean": 1.0,
+      "accuracy_min": 1.0,
+      "accuracy_max": 1.0,
+      "accuracy_stable": true,
+      "avg_cost_mean": 0.0014176727272727273,
+      "avg_cost_min": 0.0009632727272727272,
+      "avg_cost_max": 0.0025414545454545455,
+      "total_cost_sum": 0.077972,
+      "avg_latency_mean": 1.2454,
+      "avg_latency_max": 2.080090909090909,
+      "max_latency_worst": 13.337,
+      "per_item": {
+        "1": {
+          "pass": 5,
+          "n": 5,
+          "type": "算术推理"
+        },
+        "10": {
+          "pass": 5,
+          "n": 5,
+          "type": "格式约束"
+        },
+        "11": {
+          "pass": 5,
+          "n": 5,
+          "type": "算术推理"
+        },
+        "2": {
+          "pass": 5,
+          "n": 5,
+          "type": "算术推理"
+        },
+        "3": {
+          "pass": 5,
+          "n": 5,
+          "type": "代码生成"
+        },
+        "4": {
+          "pass": 5,
+          "n": 5,
+          "type": "代码生成"
+        },
+        "5": {
+          "pass": 5,
+          "n": 5,
+          "type": "事实问答"
+        },
+        "6": {
+          "pass": 5,
+          "n": 5,
+          "type": "事实问答"
+        },
+        "7": {
+          "pass": 5,
+          "n": 5,
+          "type": "格式约束"
+        },
+        "8": {
+          "pass": 5,
+          "n": 5,
+          "type": "格式约束"
+        },
+        "9": {
+          "pass": 5,
+          "n": 5,
+          "type": "格式约束"
+        }
+      }
+    },
+    "deepseek-v4-pro": {
+      "model": "deepseek-v4-pro",
+      "rounds": 5,
+      "accuracy_mean": 1.0,
+      "accuracy_min": 1.0,
+      "accuracy_max": 1.0,
+      "accuracy_stable": true,
+      "avg_cost_mean": 0.004867036363636364,
+      "avg_cost_min": 0.003546,
+      "avg_cost_max": 0.007409454545454546,
+      "total_cost_sum": 0.267687,
+      "avg_latency_mean": 1.2614181818181818,
+      "avg_latency_max": 1.6921818181818182,
+      "max_latency_worst": 9.253,
+      "per_item": {
+        "1": {
+          "pass": 5,
+          "n": 5,
+          "type": "算术推理"
+        },
+        "10": {
+          "pass": 5,
+          "n": 5,
+          "type": "格式约束"
+        },
+        "11": {
+          "pass": 5,
+          "n": 5,
+          "type": "算术推理"
+        },
+        "2": {
+          "pass": 5,
+          "n": 5,
+          "type": "算术推理"
+        },
+        "3": {
+          "pass": 5,
+          "n": 5,
+          "type": "代码生成"
+        },
+        "4": {
+          "pass": 5,
+          "n": 5,
+          "type": "代码生成"
+        },
+        "5": {
+          "pass": 5,
+          "n": 5,
+          "type": "事实问答"
+        },
+        "6": {
+          "pass": 5,
+          "n": 5,
+          "type": "事实问答"
+        },
+        "7": {
+          "pass": 5,
+          "n": 5,
+          "type": "格式约束"
+        },
+        "8": {
+          "pass": 5,
+          "n": 5,
+          "type": "格式约束"
+        },
+        "9": {
+          "pass": 5,
+          "n": 5,
+          "type": "格式约束"
+        }
+      }
+    }
+  }
+}

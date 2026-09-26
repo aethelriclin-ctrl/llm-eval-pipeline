@@ -26,7 +26,24 @@ from collections import defaultdict
 import pipeline as pl
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-OUT_PATH = os.path.join(BASE_DIR, "compare_results.json")
+
+
+def _out_path(cases_file, rounds):
+    """按「题库 + 轮数 + 时间戳」命名，避免互相覆盖。
+
+    为什么改这里：
+        原先写死成 compare_results.json，**每跑一次就盖掉上一次**——
+        "基础库 5 轮"那份数据就是这样被后来的难题库跑测冲掉的，
+        文档里引用的数字一度没有文件可核。
+    另外同时写一份 compare_results.json（_latest 副本），方便直接拿最近一次结果。
+    """
+    import time
+    tag = os.path.splitext(os.path.basename(cases_file))[0] if cases_file else "base"
+    stamp = time.strftime("%Y%m%d-%H%M%S")
+    return os.path.join(BASE_DIR, f"compare_{tag}_r{rounds}_{stamp}.json")
+
+
+OUT_PATH = os.path.join(BASE_DIR, "compare_results.json")   # _latest 副本（兼容旧引用）
 ROUNDS_DEFAULT = 5
 MODELS = ["deepseek-flash", "deepseek-v4-pro"]
 
@@ -174,10 +191,14 @@ def main(rounds, cases_file):
               f"是否值得取决于业务对精度的要求。")
 
     # ============ 落盘 ============
+    payload = {"rounds": rounds, "cases_file": cases_file, "summaries": summaries}
+    stamped = _out_path(cases_file, rounds)
+    with open(stamped, "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2)
     with open(OUT_PATH, "w", encoding="utf-8") as f:
-        json.dump({"rounds": rounds, "cases_file": cases_file,
-                   "summaries": summaries}, f, ensure_ascii=False, indent=2)
-    print(f"\n原始结果已写入: {OUT_PATH}")
+        json.dump(payload, f, ensure_ascii=False, indent=2)
+    print(f"\n原始结果已写入: {stamped}")
+    print(f"（同时更新最近一次副本: {OUT_PATH}）")
 
 
 if __name__ == "__main__":
