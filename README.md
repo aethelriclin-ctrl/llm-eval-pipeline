@@ -70,6 +70,9 @@ agent-eval/
 ## 怎么跑
 
 ```powershell
+# 0. 装依赖（Python 3.10+）
+pip install -r requirements.txt
+
 # 1. 设 API Key（PowerShell）
 $env:DEEPSEEK_API_KEY="你的key"
 
@@ -85,7 +88,7 @@ python compare_models.py                    # 11 题 × 5 轮
 python compare_models.py --cases cases_hard.json --rounds 3
 ```
 
-依赖：Python 3.x + `openai`（`pip install openai`）。
+依赖：**Python 3.10+** + `openai`（见 `requirements.txt`，安装：`pip install -r requirements.txt`）。
 **结果文件按「模型 + 题库」命名，对照汇总按「题库 + 轮数 + 时间戳」命名，多轮跑测不会互相覆盖。**
 
 ---
